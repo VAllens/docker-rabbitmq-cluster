@@ -1,17 +1,19 @@
-FROM centos
-MAINTAINER Biju Kunjummen biju.kunjummen@gmail.com
+FROM centos:7.4.1708
+MAINTAINER Allen Cai caizz520@gmail.com
 
-RUN yum install -y wget unzip tar
+RUN yum clean all && yum clean metadata && yum clean dbcache && yum makecache && yum -y update
 
-RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-9.noarch.rpm
+RUN rpm --rebuilddb && yum install -y wget unzip tar
 
-RUN yum install -y erlang
+RUN rpm -Uvh https://github.com/rabbitmq/erlang-rpm/releases/download/v20.1.7/erlang-20.1.7-1.el7.centos.x86_64.rpm
+
+RUN rpm --rebuilddb && yum install -y erlang
 
 RUN rpm --import https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
 
-RUN yum install -y https://github.com/rabbitmq/rabbitmq-server/releases/download/rabbitmq_v3_6_10/rabbitmq-server-3.6.10-1.el7.noarch.rpm 
+RUN rpm --rebuilddb && yum install -y https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.7.0/rabbitmq-server-3.7.0-1.el7.noarch.rpm
 
 RUN /usr/sbin/rabbitmq-plugins list <<<'y'
-RUN /usr/sbin/rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_stomp rabbitmq_management  rabbitmq_management_agent rabbitmq_management_visualiser rabbitmq_federation rabbitmq_federation_management sockjs<<<'y'
+RUN /usr/sbin/rabbitmq-plugins enable --offline rabbitmq_management
 
 #CMD /usr/sbin/rabbitmq-server

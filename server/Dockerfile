@@ -1,5 +1,5 @@
-FROM bijukunjummen/rabbitmq-base:3.6.10
-MAINTAINER Biju Kunjummen biju.kunjummen@gmail.com
+FROM vallen/rabbitmq-base:3.7.0
+MAINTAINER Allen Cai caizz520@gmail.com
 
 ADD rabbitmq.config /etc/rabbitmq/
 
